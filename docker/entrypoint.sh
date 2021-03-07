@@ -42,19 +42,19 @@ build_crontab_file(){
   fi
 }
 
-#git_pull_update(){
-#  if [ ${enable_git_pull_update} ];then
-#    echo "将启用git pull更新"
-#    echo "*/30 7-22 * * *       git -C /AutoSignMachine/ fetch --all && git -C /AutoSignMachine/ reset --hard ${git_branch}"  >> /var/spool/cron/crontabs/root
-#  fi
-#}
+git_pull_update(){
+  if [ ${enable_git_pull_update} ];then
+    echo "将启用git pull更新"
+    echo "*/30 7-22 * * *       git -C /AutoSignMachine/ fetch --all && git -C /AutoSignMachine/ reset --hard ${git_branch}"  >> /var/spool/cron/crontabs/root
+  fi
+}
 
-#if [ ${crontab_file} ];then
-#  echo "已指定计划任务配置${crontab_file}，将直接使用该文件"
-#  /usr/bin/crontab ${crontab_file}
-#else
-#  git_pull_update
-#  build_crontab_file
-#fi
+if [ ${crontab_file} ];then
+  echo "已指定计划任务配置${crontab_file}，将直接使用该文件"
+  /usr/bin/crontab ${crontab_file}
+else
+  git_pull_update
+  build_crontab_file
+fi
 
 /usr/sbin/crond -S -c /var/spool/cron/crontabs -f -L /dev/stdout
